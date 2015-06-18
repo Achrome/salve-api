@@ -5,7 +5,7 @@ import Mongorito from 'mongorito';
 import Logger from './utils/logger';
 import Middleware from './middleware';
 
-export default () => {
+export default (() => {
   let port = process.env.PORT || 3131;
   let host = process.env.HOST || '127.0.0.1';
   const LOG = global.LOG = (new Logger()).getLogger();
@@ -25,4 +25,4 @@ export default () => {
       LOG.info(`${server.name} is running at port ${server.url}`);
     }
   });
-}();
+})();
