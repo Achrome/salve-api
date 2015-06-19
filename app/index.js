@@ -1,5 +1,3 @@
-'use strict';
-
 import Restify from 'restify';
 import Mongorito from 'mongorito';
 import Logger from './utils/logger';

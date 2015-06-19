@@ -1,5 +1,3 @@
-'use strict';
-
 import { Model } from 'mongorito';
 import R from 'ramda';
 import Restify from 'restify';

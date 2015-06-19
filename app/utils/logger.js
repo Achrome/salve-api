@@ -1,5 +1,3 @@
-'use strict';
-
 import bunyan from 'bunyan';
 import path from 'path';
 
@@ -22,4 +20,4 @@ export default class Logger {
   getLogger() {
     return this.logger;
   }
-};
+}

@@ -1,5 +1,3 @@
-'use strict';
-
 import Restify from 'restify';
 import Router from './router';
 import JWT from './jwt';
@@ -18,7 +16,6 @@ let middleware = {
     server.use(Restify.jsonp());
     server.use(Restify.bodyParser());
     server.use(Restify.dateParser());
-    server.use(Restify.authorizationParser());
     /* eslint-disable new-cap */
     server.use(Restify.CORS({
       credentials: true

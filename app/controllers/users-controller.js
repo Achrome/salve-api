@@ -1,8 +1,7 @@
-'use strict';
-
 import User from '../models/user';
 import co from 'co';
 import Restify from 'restify';
+import R from 'ramda';
 
 let UsersController = {};
 
@@ -25,15 +24,16 @@ UsersController.create = (req, res, next) => {
 UsersController.get = (req, res, next) => {
   const id = req.user;
   co(function* () {
-    return yield User.findOne({ id: id });
+    return yield User.findOne({ '_id': id });
   }).then((user) => {
     if (!user) {
       return next(new Restify.NotFoundError());
     }
     res.send(200, {
-      user: user
+      user: R.dissoc('_id', user.toJSON())
     });
-  }, err => next(err));
+    return next();
+  }, err => next(new Restify.UnprocessableEntityError(err)));
 };
 
 export default UsersController;

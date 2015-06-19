@@ -1,6 +1,4 @@
-'use strict';
-
-import Index from '../controllers/index'
+import Index from '../controllers/index';
 import Users from '../controllers/users-controller';
 import Sessions from '../controllers/sessions-controller';
 
