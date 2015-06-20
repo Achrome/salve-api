@@ -11,15 +11,15 @@ export default class User extends Model {
   }
 
   * validateFields(next) {
-    let email = this.get('email');
-    let password = this.get('password');
+    const email = this.get('email');
+    const password = this.get('password');
     if (!email) {
       throw new Restify.BadRequestError('No email provided');
     }
     if (!password) {
       throw new Restify.BadRequestError('No password provided');
     }
-    let user = yield User.where('email', email).find();
+    const user = yield User.where('email', email).find();
     if (user.length > 0) {
       throw new Restify.UnprocessableEntityError('User already exists');
     }
@@ -27,7 +27,7 @@ export default class User extends Model {
   }
 
   * encryptPassword(next) {
-    let salt = yield Bcrypt.genSalt(15);
+    const salt = yield Bcrypt.genSalt(15);
     this.set('enc_password', yield Bcrypt.hash(this.get('password'), salt));
     yield next;
   }

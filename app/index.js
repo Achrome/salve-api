@@ -4,10 +4,10 @@ import Logger from './utils/logger';
 import Middleware from './middleware';
 
 export default (() => {
-  let port = process.env.PORT || 3131;
-  let host = process.env.HOST || '127.0.0.1';
+  const port = process.env.PORT || 3131;
+  const host = process.env.HOST || '127.0.0.1';
   const LOG = global.LOG = (new Logger()).getLogger();
-  let server = Restify.createServer({
+  const server = Restify.createServer({
     name: 'Salve API',
     version: '0.1.0',
     log: LOG

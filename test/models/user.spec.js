@@ -13,7 +13,6 @@ describe('User', () => {
   });
 
   after(function* () {
-    yield User.drop();
     Mongorito.disconnect();
   });
 
@@ -46,14 +45,28 @@ describe('User', () => {
         password: 'bar'
       });
       let user2 = user1;
+      Sinon.stub(user1, 'encryptPassword', function* () {
+        this.set('enc_password', 'bar_enc');
+      });
+      Sinon.stub(user1, 'save', function* () {
+        this.set('_id', 1);
+      });
       yield user1.save();
+      Sinon.stub(User.where(), 'find').returns([user1]);
       try {
         yield user2.save();
       } catch(err) {
         expect(err).to.be.an.instanceOf(Restify.UnprocessableEntityError);
         expect(err.message).to.equal('User already exists');
       }
+      Sinon.stub(user1, 'remove', function* () {
+        this.set('_id', 0);
+      });
       yield user1.remove();
+      user1.save.restore();
+      Sinon.stub(user2, 'save', function* () {
+        this.set('_id', 1);
+      });
       yield user2.save();
       /* eslint-disable no-unused-expressions */
       expect(user2.get('_id')).to.be.ok;
@@ -69,6 +82,9 @@ describe('User', () => {
       });
       Sinon.stub(user, 'save', function* () {
         user.set('_id', 1);
+      });
+      Sinon.stub(user, 'encryptPassword', function* () {
+        this.set('enc_password', 'bar_enc');
       });
       yield user.save();
       expect(user.get('_id')).to.equal(1);
