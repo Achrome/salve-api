@@ -30,7 +30,7 @@ SessionsController.login = (req, res, next) => {
       }
       res.send(200, { token: token });
     }
-  }).then(() => next(), (err) => next(err));
+  }).then(next).catch(next);
 };
 
 export default SessionsController;

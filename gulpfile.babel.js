@@ -1,9 +1,8 @@
 import gulp from 'gulp';
 import loadPlugins from 'gulp-load-plugins';
-import childProcess from 'child_process';
+import {spawn} from 'child_process';
 
 const $ = loadPlugins();
-const spawn = childProcess.spawn;
 
 gulp.task('dev:server', () => {
   return $.nodemon({

@@ -12,28 +12,25 @@ UsersController.create = (req, res, next) => {
   });
 
   co(function* () {
-    return yield user.save();
-  }).then((usr) => {
+    yield user.save();
     res.send(201, {
-      id: usr.get('_id')
+      id: user.get('_id')
     });
-    next();
-  }, err => next(err));
+  }).then(next).catch(next);
 };
 
 UsersController.get = (req, res, next) => {
   const id = req.user;
   co(function* () {
-    return yield User.findOne({ '_id': id });
-  }).then((user) => {
+    const user = yield User.findOne({ '_id': id });
     if (!user) {
-      return next(new Restify.NotFoundError());
+      throw new Restify.NotFoundError();
     }
+
     res.send(200, {
       user: R.dissoc('_id', user.toJSON())
     });
-    return next();
-  }, err => next(new Restify.UnprocessableEntityError(err)));
+  }).then(next).catch(next);
 };
 
 export default UsersController;
