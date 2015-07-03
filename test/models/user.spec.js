@@ -46,7 +46,7 @@ describe('User', () => {
       });
       let user2 = user1;
       Sinon.stub(user1, 'encryptPassword', function* () {
-        this.set('enc_password', 'bar_enc');
+        this.set('password', 'bar_enc');
       });
       Sinon.stub(user1, 'save', function* () {
         this.set('_id', 1);
@@ -84,7 +84,7 @@ describe('User', () => {
         user.set('_id', 1);
       });
       Sinon.stub(user, 'encryptPassword', function* () {
-        this.set('enc_password', 'bar_enc');
+        this.set('password', 'bar_enc');
       });
       yield user.save();
       expect(user.get('_id')).to.equal(1);
@@ -92,7 +92,6 @@ describe('User', () => {
       expect(user.get('password')).to.be.ok;
       /* eslint-enable no-unused-expressions */
       expect(user.toJSON()).to.not.include.keys('password');
-      expect(user.toJSON()).to.not.include.keys('enc_password');
     });
   });
 });

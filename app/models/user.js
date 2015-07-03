@@ -28,7 +28,7 @@ export default class User extends Model {
 
   * encryptPassword(next) {
     const salt = yield Bcrypt.genSalt(15);
-    this.set('enc_password', yield Bcrypt.hash(this.get('password'), salt));
+    this.set('password', yield Bcrypt.hash(this.get('password'), salt));
     yield next;
   }
 

@@ -20,7 +20,7 @@ SessionsController.login = (req, res, next) => {
     if (!user) {
       throw new Restify.NotFoundError();
     } else {
-      const validPass = yield Bcrypt.compare(password, user.get('enc_password'));
+      const validPass = yield Bcrypt.compare(password, user.get('password'));
       if (!validPass) {
         throw new Restify.InvalidCredentialsError();
       }
