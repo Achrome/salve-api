@@ -2,7 +2,7 @@ import Jwt from 'jsonwebtoken';
 import Router from './router';
 import R from 'ramda';
 import co from 'co';
-import Restify from 'restify';
+import { InvalidHeaderError, InvalidCredentialsError, ForbiddenError } from 'restify';
 
 const SECRET_KEY = 'omfg wow';
 
@@ -30,10 +30,10 @@ JWT.middleware = (req, res, next) => {
       return next();
     }
     if (!req.headers) {
-      throw new Restify.InvalidHeaderError('Invalid headers');
+      throw new InvalidHeaderError('Invalid headers');
     }
     if (!req.headers['x-salve-auth']) {
-      throw new Restify.InvalidCredentialsError('Invalid or no token');
+      throw new InvalidCredentialsError('Invalid or no token');
     }
     let parts = req.headers['x-salve-auth'].split(' ');
     let token;
@@ -41,21 +41,21 @@ JWT.middleware = (req, res, next) => {
       if (/^Bearer$/.test(parts[0])) {
         token = parts[1];
       } else {
-        throw new Restify.InvalidCredentialsError('Invalid or no token');
+        throw new InvalidCredentialsError('Invalid or no token');
       }
     } else {
-      throw new Restify.InvalidCredentialsError('Invalid or no token');
+      throw new InvalidCredentialsError('Invalid or no token');
     }
     return yield JWT.verify(token);
   }).then((decoded, err) => {
     if (err) {
-      return next(new Restify.ForbiddenError(err));
+      return next(new ForbiddenError(err));
     }
     /* eslint-disable no-underscore-dangle */
     req.user = decoded._id;
     return next();
     /* eslint-enable no-underscore-dangle */
-  }, (err) => next(new Restify.ForbiddenError(err)));
+  }, (err) => next(new ForbiddenError(err)));
 };
 
 export default JWT;

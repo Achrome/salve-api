@@ -1,6 +1,6 @@
 import { Model } from 'mongorito';
 import R from 'ramda';
-import Restify from 'restify';
+import { BadRequestError, UnprocessableEntityError } from 'restify';
 import Bcrypt from '../utils/bcrypt';
 
 export default class User extends Model {
@@ -14,14 +14,14 @@ export default class User extends Model {
     const email = this.get('email');
     const password = this.get('password');
     if (!email) {
-      throw new Restify.BadRequestError('No email provided');
+      throw new BadRequestError('No email provided');
     }
     if (!password) {
-      throw new Restify.BadRequestError('No password provided');
+      throw new BadRequestError('No password provided');
     }
     const user = yield User.where('email', email).find();
     if (user.length > 0) {
-      throw new Restify.UnprocessableEntityError('User already exists');
+      throw new UnprocessableEntityError('User already exists');
     }
     yield next;
   }

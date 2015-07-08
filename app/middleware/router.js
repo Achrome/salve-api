@@ -2,7 +2,7 @@ import Index from '../controllers/index';
 import Users from '../controllers/users-controller';
 import Sessions from '../controllers/sessions-controller';
 
-let Router = [
+const Router = [
   {
     method: 'get',
     path: '/',

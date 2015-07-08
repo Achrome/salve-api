@@ -1,6 +1,6 @@
 import User from '../models/user';
 import co from 'co';
-import Restify from 'restify';
+import { NotFoundError } from 'restify';
 import R from 'ramda';
 
 let UsersController = {};
@@ -24,7 +24,7 @@ UsersController.get = (req, res, next) => {
   co(function* () {
     const user = yield User.findOne({ '_id': id });
     if (!user) {
-      throw new Restify.NotFoundError();
+      throw new NotFoundError();
     }
 
     res.send(200, {
