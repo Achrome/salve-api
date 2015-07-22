@@ -1,6 +1,6 @@
 import User from '../models/user';
 import Bcrypt from '../utils/bcrypt';
-import { ForbiddenError, InvalidCredentialsError, NotFoundError, InternalError } from 'restify';
+import {ForbiddenError, InvalidCredentialsError, NotFoundError, InternalError} from 'restify';
 import JWT from '../middleware/jwt';
 import co from 'co';
 
@@ -12,7 +12,7 @@ SessionsController.login = (req, res, next) => {
     if (!email) {
       throw new ForbiddenError('Email or password missing');
     }
-    const user = yield User.findOne({ email: email });
+    const user = yield User.findOne({ email });
     const password = req.params.password;
     if (!password) {
       throw new ForbiddenError('Email or password missing');
@@ -28,7 +28,7 @@ SessionsController.login = (req, res, next) => {
       if (!token) {
         throw new InternalError();
       }
-      res.send(200, { token: token });
+      res.send(200, { token });
     }
   }).then(next).catch(next);
 };

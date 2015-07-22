@@ -1,4 +1,8 @@
 {
+  "parser": "babel-eslint",
+  "plugins": [
+    "babel"
+  ],
   "ecmaFeatures": {
     "blockBindings": true,
     "forOf": true,
@@ -14,9 +18,19 @@
     "templateStrings": true
   },
   "rules": {
-    "eqeqeq": 1,
+    "eqeqeq": 2,
     "curly": 2,
-    "quotes": [1, "single"]
+    "strict": 1,
+    "quotes": [1, "single"],
+    "new-cap": 0,
+    "block-scoped-var": 0,
+    "space-in-brackets": 0,
+    "babel/block-scoped-var": 1,
+    "babel/object-shorthand": 1,
+    "babel/generator-star": 0,
+    "babel/generator-star-spacing": 0,
+    "babel/new-cap": 1,
+    "babel/space-in-brackets": 0
   },
   "env": {
     "node": true,

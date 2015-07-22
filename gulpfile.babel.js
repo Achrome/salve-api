@@ -1,11 +1,12 @@
 import gulp from 'gulp';
 import loadPlugins from 'gulp-load-plugins';
 import {spawn} from 'child_process';
+import sourcemapsReporter from 'jshint-sourcemap-reporter';
 
 const $ = loadPlugins();
 
 gulp.task('dev:server', () => {
-  return $.nodemon({
+  $.nodemon({
     script: 'bootstrap.js',
     watch: ['app/**/*.js', 'gulpfile.babel.js'],
     ignore: ['test/'],
@@ -22,26 +23,51 @@ gulp.task('dev:server', () => {
 });
 
 gulp.task('js:lint', () => {
-  return gulp.src('**/*.js')
-          .pipe($.plumber())
-          .pipe($.eslint())
-          .pipe($.eslint.format())
-          .pipe($.eslint.failOnError());
+  gulp.src(['app/**/*.js', 'test/**/*.js'])
+        .pipe($.plumber())
+        .pipe($.eslint())
+        .pipe($.eslint.format())
+        .pipe($.eslint.failOnError());
 });
 
 gulp.task('dev:test', () => {
-  return gulp.src('./test/**/*.js')
-          .pipe($.plumber())
-          .pipe($.mocha({
-            reporter: 'list',
-            require: ['co-mocha'],
-            timeout: 15000
-          }));
+  gulp.src('./test/**/*.js')
+        .pipe($.plumber())
+        .pipe($.mocha({
+          reporter: 'list',
+          require: ['co-mocha'],
+          timeout: 15000
+        }));
+});
+
+gulp.task('dev:flow:babel', (cb) => {
+  gulp.src('app/**/*.js')
+        .pipe($.sourcemaps.init())
+        .pipe($.babel({ blacklist: ['flow'] }))
+        .on('error', $.notify.onError('<%= error.message %>'))
+        .pipe($.sourcemaps.write('.'))
+        .pipe(gulp.dest('tmp_flow/'))
+        .on('end', cb);
+});
+
+gulp.task('dev:flow', ['dev:flow:babel'], () => {
+  gulp.src('tmp_flow/**/*.js')
+        .pipe($.flowtype({
+          all: false,
+          weak: false,
+          killFlow: false,
+          beep: true,
+          abort: false,
+          reporter: {
+            reporter: (errors) => {
+              return sourcemapsReporter.reporter(errors, { sourceRoot: '/app/'});
+            }
+          }
+        }));
 });
 
 gulp.task('dev:watch', () => {
-  gulp.watch(['./app/**/*.js', './test/**/*.js'], ['dev:test']);
-  gulp.watch(['./app/**/*.js', './test/**/*.js'], ['js:lint']);
+  gulp.watch(['./app/**/*.js', './test/**/*.js'], ['dev:test', 'js:lint', 'dev:flow']);
 });
 
 gulp.task('default', ['dev:server', 'dev:watch']);
