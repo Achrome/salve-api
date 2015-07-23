@@ -1,10 +1,8 @@
-/* @flow */
-
 import Restify from 'restify';
 import Router from './router';
 import JWT from './jwt';
 
-let middleware = {
+let middleware : Object = {
   inject: (server : Object) => {
     server.use((req : Object, res : Object, next : Function) => {
       res.header('X-Powered-By', 'Salve');
@@ -25,7 +23,7 @@ let middleware = {
     /* eslint-enable babel/new-cap */
     server.use(JWT.middleware);
     server.on('after', Restify.auditLogger({
-      log: LOG
+      log: global.LOG
     }));
     for (let route of Router) {
       if (!server[route.method]) {

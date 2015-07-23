@@ -4,26 +4,25 @@ import R from 'ramda';
 import co from 'co';
 import { InvalidHeaderError, InvalidCredentialsError, ForbiddenError } from 'restify';
 
-const SECRET_KEY = 'omfg wow';
+const SECRET_KEY : string = 'omfg wow';
 
-let opts = {
+let opts : Object = {
   algorithm: 'HS512',
   expiresInMinutes: 60 * 5
 };
 
-let JWT = {};
+let JWT : Object = {};
 
 JWT.sign = user => Jwt.sign(user.toJSON(), SECRET_KEY, opts);
 
-JWT.verify = (token) => {
-  return (done) => {
+JWT.verify = token =>
+  (done) => {
     Jwt.verify(token, SECRET_KEY, opts, done);
   };
-};
 
 JWT.decode = token => Jwt.decode(token).payload;
 
-JWT.middleware = (req, res, next) => {
+JWT.middleware = (req : Object, res : Object, next : Function) => {
   co(function* () {
     let skippedRoutes = R.map(route => route.path, R.filter(route => route.protected === false, Router));
     if (R.contains(req.url, skippedRoutes)) {
@@ -47,7 +46,7 @@ JWT.middleware = (req, res, next) => {
       throw new InvalidCredentialsError('Invalid or no token');
     }
     return yield JWT.verify(token);
-  }).then((decoded, err) => {
+  }).then((decoded : string, err : Error) => {
     if (err) {
       return next(new ForbiddenError(err));
     }

@@ -67,7 +67,7 @@ gulp.task('dev:flow', ['dev:flow:babel'], () => {
 });
 
 gulp.task('dev:watch', () => {
-  gulp.watch(['./app/**/*.js', './test/**/*.js'], ['dev:test', 'js:lint', 'dev:flow']);
+  gulp.watch(['./app/**/*.js', './test/**/*.js'], ['dev:test', 'js:lint']);
 });
 
 gulp.task('default', ['dev:server', 'dev:watch']);
