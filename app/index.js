@@ -5,8 +5,8 @@ import Bunyan from 'bunyan';
 import Path from 'path';
 
 export default (() => {
-  const port : number = process.env.PORT || 3131;
-  const host : string = process.env.HOST || '127.0.0.1';
+  const port = process.env.PORT || 3131;
+  const host = process.env.HOST || '127.0.0.1';
   global.LOG = Bunyan.createLogger({
     name: 'Salve API',
     streams: [
@@ -20,14 +20,14 @@ export default (() => {
       }
     ]
   });
-  const server : Object = Restify.createServer({
+  const server = Restify.createServer({
     name: 'Salve API',
     version: '0.1.0',
     log: global.LOG
   });
   Middleware.inject(server);
   Mongorito.connect('localhost/salve-db');
-  server.listen(port, host, (err : Error) => {
+  server.listen(port, host, (err) => {
     if (err) {
       global.LOG.error(err);
       Mongorito.disconnect();

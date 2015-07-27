@@ -5,7 +5,7 @@ import Bcrypt from '../utils/bcrypt';
 
 export default class User extends Model {
   configure() {
-    this.privateFields = ['password', 'enc_password', 'created_at', 'updated_at'];
+    this.privateFields = ['password', 'created_at', 'updated_at'];
     this.before('save', 'validateFields');
     this.before('save', 'encryptPassword');
   }
@@ -28,7 +28,7 @@ export default class User extends Model {
 
   * encryptPassword(next) {
     const salt = yield Bcrypt.genSalt(15);
-    this.set('password', yield Bcrypt.hash(this.get('password'), salt));
+    this.password = yield Bcrypt.hash(this.password, salt);
     yield next;
   }
 
