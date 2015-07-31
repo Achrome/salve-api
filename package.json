@@ -29,7 +29,7 @@
     "eslint": "^0.24.1",
     "eslint-plugin-babel": "^1.2.0",
     "gulp": "^3.9.0",
-    "gulp-babel": "^5.1.0",
+    "gulp-babel": "^5.2.0",
     "gulp-eslint": "^0.15.0",
     "gulp-flowtype": "^0.4.7",
     "gulp-load-plugins": "^1.0.0-rc",
